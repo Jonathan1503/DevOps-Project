@@ -18,7 +18,7 @@ jwt = JWTManager(application)
 
 # Configurar API
 api = Api(application)
-api.add_resource(BlacklistResource, "/blacklists")
+api.add_resource(BlacklistResource, "/blacklists", "/blacklists/<string:email>")
 
 
 # Crear tablas en la primera ejecución
