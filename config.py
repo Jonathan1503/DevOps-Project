@@ -1,13 +1,14 @@
 import os
 
-DB_USER = "tu_usuario"
-DB_PASSWORD = "tu_contraseña"
+
+DB_USER = "postgres"
+DB_PASSWORD = "postgres"
 DB_HOST = "localhost"  
 DB_PORT = "5432"
-DB_NAME = "blacklist_db"
+DB_NAME = "postgres"
 
 SQLALCHEMY_DATABASE_URI = f"postgresql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
 SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 SECRET_KEY = "supersecretkey"
-JWT_SECRET_KEY = "static-token" 
+JWT_SECRET_KEY = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJPbmxpbmUgSldUIEJ1aWxkZXIiLCJpYXQiOjE3NDMzNTQ4NzcsImV4cCI6MTc3NDg5MDg5MiwiYXVkIjoid3d3LmV4YW1wbGUuY29tIiwic3ViIjoianJvY2tldEBleGFtcGxlLmNvbSIsIkdpdmVuTmFtZSI6IkpvaG5ueSIsIlN1cm5hbWUiOiJSb2NrZXQiLCJFbWFpbCI6Impyb2NrZXRAZXhhbXBsZS5jb20iLCJSb2xlIjpbIk1hbmFnZXIiLCJQcm9qZWN0IEFkbWluaXN0cmF0b3IiXX0.eKKappNb0N-vJtrOnoOau-AnXvEN07Up_HspTt5pia8" 
