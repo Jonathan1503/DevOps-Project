@@ -24,4 +24,9 @@ class BlacklistResource(Resource):
 
         return blacklist_schema.dump(new_entry), 201
 
- 
+    @jwt_required()
+    def get(self, email):
+        entry = Blacklist.query.filter_by(email=email).first()
+        if entry:
+            return {"is_blacklisted": True, "blocked_reason": entry.blocked_reason}, 200
+        return {"is_blacklisted": False}, 200
