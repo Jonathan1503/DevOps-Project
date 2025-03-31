@@ -4,6 +4,8 @@ from models import Blacklist
 from database import db
 from schemas.blacklist_schema import blacklist_schema
 from flask_jwt_extended import jwt_required
+import re
+import uuid
 
 class BlacklistResource(Resource):
     @jwt_required()
@@ -15,6 +17,20 @@ class BlacklistResource(Resource):
 
         if not email or not app_uuid:
             return {"message": "Email and app_uuid are required"}, 400
+
+        email_pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
+        if not re.match(email_pattern, email):
+            return {"message": "Invalid email format"}, 400
+
+        try:
+            uuid_obj = uuid.UUID(app_uuid)
+            if str(uuid_obj) != app_uuid:
+                return {"message": "Invalid UUID format"}, 400
+        except ValueError:
+            return {"message": "Invalid UUID format"}, 400
+        
+        if Blacklist.query.filter_by(email=email, app_uuid=app_uuid).first():
+            return {"message": "Email already blacklisted for this app"}, 400
 
         ip_address = request.remote_addr
         new_entry = Blacklist(email=email, app_uuid=app_uuid, ip_address=ip_address, blocked_reason=blocked_reason)
