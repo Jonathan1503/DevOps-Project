@@ -1,34 +1,23 @@
-from flask import request, jsonify
+from flask import request
 from flask_restful import Resource
 from models import Blacklist
 from database import db
-from schemas.blacklist_schema import blacklist_schema
+from schemas.blacklist_schema import blacklist_schema, blacklist_input_schema
 from flask_jwt_extended import jwt_required
-import re
-import uuid
 
 class BlacklistResource(Resource):
     @jwt_required()
     def post(self):
         data = request.get_json()
-        email = data.get("email")
-        app_uuid = data.get("app_uuid")
-        blocked_reason = data.get("blocked_reason", "")
-
-        if not email or not app_uuid:
-            return {"message": "Email and app_uuid are required"}, 400
-
-        email_pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
-        if not re.match(email_pattern, email):
-            return {"message": "Invalid email format"}, 400
-
         try:
-            uuid_obj = uuid.UUID(app_uuid)
-            if str(uuid_obj) != app_uuid:
-                return {"message": "Invalid UUID format"}, 400
-        except ValueError:
-            return {"message": "Invalid UUID format"}, 400
-        
+            validated_data = blacklist_input_schema.load(data)
+        except Exception as e:
+            return {"message": str(e)}, 400
+
+        email = validated_data.get("email")
+        app_uuid = validated_data.get("app_uuid")
+        blocked_reason = validated_data.get("blocked_reason", "")
+
         if Blacklist.query.filter_by(email=email, app_uuid=app_uuid).first():
             return {"message": "Email already blacklisted for this app"}, 400
 
