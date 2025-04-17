@@ -1,7 +1,7 @@
 import json
 import pytest
 from application import application as app, db
-from models import Blacklist  # Ajusta según tu estructura real
+from models import Blacklist  
 from flask_jwt_extended import create_access_token
 
 @pytest.fixture
@@ -34,7 +34,7 @@ def test_post_blacklist_success(client, auth_headers):
 
 
 def test_get_blacklist_found(client, auth_headers):
-    # Inserta entrada
+    
     entry = Blacklist(
         email="found@example.com",
         app_uuid="abc",
