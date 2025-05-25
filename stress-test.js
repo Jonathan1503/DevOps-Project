@@ -7,7 +7,7 @@ const errorRate = new Rate('errors');
 
 // Test configuration
 export const options = {
-  stages: [
+  stages: [ 
     { duration: '1m', target: 20 },  // Ramp up to 20 users
     { duration: '3m', target: 20 },  // Stay at 20 users
     { duration: '1m', target: 50 },  // Ramp up to 50 users
@@ -31,17 +31,17 @@ export default function () {
     'Authorization': `Bearer ${JWT_TOKEN}`
   };
 
-  // Test POST request to blacklist an email
+  const randomPart = Math.floor(Math.random() * 1e9); // Random number for uniqueness
   const postPayload = JSON.stringify({
-    email: `test${__VU}_${__ITER}@example.com`, // Unique email per request
-    app_uuid: 'test-app-uuid',
+    email: `test${__VU}_${__ITER}_${randomPart}@example.com`, // Unique email per request
+    app_uuid: 'b7e1c7e2-2c3a-4e7a-9e2a-8b1e2f3c4d5f',
     blocked_reason: 'Test blacklist'
   });
 
   const postResponse = http.post(`${BASE_URL}/blacklists`, postPayload, {
     headers: headers
   });
-  console.log(postResponse);
+
   check(postResponse, {
     'POST blacklist status is 201': (r) => r.status === 201,
   }) || errorRate.add(1);
