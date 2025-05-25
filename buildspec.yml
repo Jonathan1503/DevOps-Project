@@ -13,7 +13,7 @@ phases:
       - docker build -t entrega4_app .
       - docker tag entrega4_app:latest 173961276629.dkr.ecr.us-east-1.amazonaws.com/entrega4_app:latest
       - echo Running tests...
-      - docker run --rm devops_app pytest test.py --maxfail=1 --disable-warnings --tb=short
+      - docker run --rm entrega4_app pytest test.py --maxfail=1 --disable-warnings --tb=short
   post_build:
     commands:
       - echo Build completed on `date`
